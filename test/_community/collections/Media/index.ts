@@ -4,10 +4,21 @@ export const mediaSlug = 'media'
 
 export const MediaCollection: CollectionConfig = {
   slug: mediaSlug,
-  upload: true,
+  admin: {
+    useAsTitle: 'title',
+  },
   access: {
     read: () => true,
     create: () => true,
   },
-  fields: [],
+  fields: [
+    {
+      type: 'text',
+      name: 'title',
+    },
+    {
+      type: 'text',
+      name: 'test',
+    },
+  ],
 }

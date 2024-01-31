@@ -1,6 +1,9 @@
+import qs from 'qs'
+
 import payload from '../../packages/payload/src'
 import { devUser } from '../credentials'
 import { initPayloadTest } from '../helpers/configHelpers'
+import { mediaSlug } from './collections/Media'
 import { postsSlug } from './collections/Posts'
 
 require('isomorphic-fetch')
@@ -44,7 +47,7 @@ describe('_Community Tests', () => {
   // use the tests below as a guide
   // --__--__--__--__--__--__--__--__--__
 
-  it('local API example', async () => {
+  it.skip('local API example', async () => {
     const newPost = await payload.create({
       collection: postsSlug,
       data: {
@@ -55,7 +58,7 @@ describe('_Community Tests', () => {
     expect(newPost.text).toEqual('LOCAL API EXAMPLE')
   })
 
-  it('rest API example', async () => {
+  it.skip('rest API example', async () => {
     const newPost = await fetch(`${apiUrl}/${postsSlug}`, {
       method: 'POST',
       headers: {
@@ -69,4 +72,87 @@ describe('_Community Tests', () => {
 
     expect(newPost.doc.text).toEqual('REST API EXAMPLE')
   })
+
+  describe('local API', () => {
+    it('should find 3 media docs', async () => {
+      const { totalDocs } = await payload.find({
+        collection: mediaSlug,
+      })
+
+      expect(totalDocs).toEqual(3)
+    })
+
+    it('should find 1 media docs with equals:null', async () => {
+      const { totalDocs } = await payload.find({
+        collection: mediaSlug,
+        where: {
+          test: {
+            equals: null,
+          },
+        },
+      })
+
+      expect(totalDocs).toEqual(1)
+    })
+
+    it('should find 1 media docs with exists:false', async () => {
+      const { totalDocs } = await payload.find({
+        collection: mediaSlug,
+        where: {
+          test: {
+            exists: false,
+          },
+        },
+      })
+
+      expect(totalDocs).toEqual(1)
+    })
+  })
+
+  describe('REST API', () => {
+    it('should find 3 media docs', async () => {
+      const { totalDocs } = await findREST({
+        collection: mediaSlug,
+      })
+
+      expect(totalDocs).toEqual(3)
+    })
+
+    it('should find 1 media docs with equals:null', async () => {
+      const { totalDocs } = await findREST({
+        collection: mediaSlug,
+        where: {
+          test: {
+            equals: null,
+          },
+        },
+      })
+
+      expect(totalDocs).toEqual(1)
+    })
+
+    it('should find 1 media docs with exists:false', async () => {
+      const { totalDocs } = await findREST({
+        collection: mediaSlug,
+        where: {
+          test: {
+            exists: false,
+          },
+        },
+      })
+
+      expect(totalDocs).toEqual(1)
+    })
+  })
 })
+
+function findREST({ collection, where = {} }) {
+  const query = qs.stringify({ where })
+  return fetch(`${apiUrl}/${collection}?${query}`, {
+    method: 'GET',
+    headers: {
+      ...headers,
+      Authorization: `JWT ${jwt}`,
+    },
+  }).then((res) => res.json())
+}

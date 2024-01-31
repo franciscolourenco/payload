@@ -1,4 +1,5 @@
 import type { CollectionConfig } from '../../../../packages/payload/src/collections/config/types'
+import type { Where } from '../../../../packages/payload/types'
 
 import { mediaSlug } from '../Media'
 
@@ -12,12 +13,40 @@ export const PostsCollection: CollectionConfig = {
     },
     {
       name: 'associatedMedia',
-      access: {
-        create: () => true,
-        update: () => false,
+      type: 'relationship',
+      relationTo: mediaSlug,
+    },
+    {
+      name: 'associatedMediaWhereFieldEqualsNull',
+      type: 'relationship',
+      admin: {
+        description:
+          'This select should only show media items where the test field is null, but it shows nothing',
       },
       relationTo: mediaSlug,
-      type: 'upload',
+      filterOptions: (): Where => {
+        return {
+          test: {
+            equals: null,
+          },
+        }
+      },
+    },
+    {
+      name: 'associatedMediaWhereFieldExistsFalse',
+      type: 'relationship',
+      relationTo: mediaSlug,
+      admin: {
+        description:
+          'This select should only show media items where the test field is undefined (or null), but it shows nothing',
+      },
+      filterOptions: (): Where => {
+        return {
+          test: {
+            exists: false,
+          },
+        }
+      },
     },
   ],
   slug: postsSlug,
