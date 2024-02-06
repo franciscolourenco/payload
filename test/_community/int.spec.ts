@@ -44,29 +44,10 @@ describe('_Community Tests', () => {
   // use the tests below as a guide
   // --__--__--__--__--__--__--__--__--__
 
-  it('local API example', async () => {
-    const newPost = await payload.create({
-      collection: postsSlug,
-      data: {
-        text: 'LOCAL API EXAMPLE',
-      },
-    })
-
-    expect(newPost.text).toEqual('LOCAL API EXAMPLE')
-  })
-
-  it('rest API example', async () => {
-    const newPost = await fetch(`${apiUrl}/${postsSlug}`, {
-      method: 'POST',
-      headers: {
-        ...headers,
-        Authorization: `JWT ${jwt}`,
-      },
-      body: JSON.stringify({
-        text: 'REST API EXAMPLE',
-      }),
-    }).then((res) => res.json())
-
-    expect(newPost.doc.text).toEqual('REST API EXAMPLE')
+  it('should respond with the error in the body and a custom error code', async () => {
+    const response = await fetch(`${apiUrl}/test`)
+    const body = await response.json()
+    expect(response.status).toEqual(512)
+    expect(body).toEqual({ errors: [{ message: 'Test error message' }] })
   })
 })
