@@ -1,6 +1,6 @@
 import { buildConfigWithDefaults } from '../buildConfigWithDefaults'
 import { devUser } from '../credentials'
-import { MediaCollection } from './collections/Media'
+import { MediaCollection, mediaSlug } from './collections/Media'
 import { PostsCollection, postsSlug } from './collections/Posts'
 import { MenuGlobal } from './globals/Menu'
 
@@ -33,6 +33,10 @@ export default buildConfigWithDefaults({
       data: {
         text: 'example post',
       },
+    })
+    await payload.create({
+      collection: mediaSlug,
+      data: {},
     })
   },
 })

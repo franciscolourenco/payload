@@ -21,4 +21,16 @@ export const PostsCollection: CollectionConfig = {
     },
   ],
   slug: postsSlug,
+  hooks: {
+    afterRead: [
+      async ({ req }) => {
+        console.log('afterRead req.collection.config.slug in posts:', req.collection.config.slug)
+
+        await req.payload.find({
+          collection: mediaSlug,
+          req,
+        })
+      },
+    ],
+  },
 }
