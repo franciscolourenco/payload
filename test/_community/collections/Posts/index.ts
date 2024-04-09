@@ -11,6 +11,25 @@ export const PostsCollection: CollectionConfig = {
       type: 'text',
     },
     {
+      name: 'items',
+      type: 'array',
+      fields: [
+        {
+          label: 'Collapsible',
+          type: 'collapsible',
+          fields: [
+            {
+              name: 'nestedText',
+              type: 'text',
+            },
+          ],
+          admin: {
+            initCollapsed: true,
+          },
+        },
+      ],
+    },
+    {
       name: 'associatedMedia',
       access: {
         create: () => true,
