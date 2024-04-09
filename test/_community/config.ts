@@ -9,6 +9,18 @@ export default buildConfigWithDefaults({
   collections: [
     PostsCollection,
     MediaCollection,
+    {
+      slug: 'users',
+      fields: [
+        {
+          name: 'username',
+          type: 'text',
+        },
+      ],
+      auth: {
+        useAPIKey: true,
+      },
+    },
     // ...add more collections here
   ],
   globals: [
