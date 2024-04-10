@@ -20,7 +20,7 @@ export default buildConfigWithDefaults({
   },
 
   onInit: async (payload) => {
-    await payload.create({
+    const user = await payload.create({
       collection: 'users',
       data: {
         email: devUser.email,
@@ -32,6 +32,7 @@ export default buildConfigWithDefaults({
       collection: postsSlug,
       data: {
         text: 'example post',
+        createdBy: user.id,
       },
     })
   },

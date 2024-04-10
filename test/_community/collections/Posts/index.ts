@@ -19,6 +19,11 @@ export const PostsCollection: CollectionConfig = {
       relationTo: mediaSlug,
       type: 'upload',
     },
+    {
+      name: 'createdBy',
+      type: 'relationship',
+      relationTo: 'users',
+    },
   ],
   slug: postsSlug,
 }
