@@ -1,4 +1,6 @@
+import qs from 'qs'
 import payload from '../../packages/payload/src'
+import type { Where } from '../../packages/payload/types'
 import { devUser } from '../credentials'
 import { initPayloadTest } from '../helpers/configHelpers'
 import { postsSlug } from './collections/Posts'
@@ -44,29 +46,191 @@ describe('_Community Tests', () => {
   // use the tests below as a guide
   // --__--__--__--__--__--__--__--__--__
 
-  it('local API example', async () => {
-    const newPost = await payload.create({
-      collection: postsSlug,
-      data: {
-        text: 'LOCAL API EXAMPLE',
-      },
+  describe('payload.find', () => {
+    it('should find 1 doc', async () => {
+      const posts = await payload.find({
+        collection: postsSlug,
+        where: {},
+      })
+      expect(posts.totalDocs).toBe(1)
     })
 
-    expect(newPost.text).toEqual('LOCAL API EXAMPLE')
+    it('should find 0 docs with id equals null', async () => {
+      const posts = await payload.find({
+        collection: postsSlug,
+        where: {
+          id: {
+            equals: null,
+          },
+        },
+      })
+      expect(posts.totalDocs).toBe(0)
+    })
+
+    it('should find 0 docs with id equals undefined', async () => {
+      const posts = await payload.find({
+        collection: postsSlug,
+        where: {
+          id: {
+            equals: undefined,
+          },
+        },
+      })
+      expect(posts.totalDocs).toBe(0)
+    })
+
+    it('should find 0 docs with id in []', async () => {
+      const posts = await payload.find({
+        collection: postsSlug,
+        where: {
+          id: {
+            in: [],
+          },
+        },
+      })
+      expect(posts.totalDocs).toBe(0)
+    })
+
+    it('should find 0 docs with id in [null]', async () => {
+      const posts = await payload.find({
+        collection: postsSlug,
+        where: {
+          id: {
+            in: [null],
+          },
+        },
+      })
+      expect(posts.totalDocs).toBe(0)
+    })
+
+    it('should find 0 docs with id in [undefined]', async () => {
+      const posts = await payload.find({
+        collection: postsSlug,
+        where: {
+          id: {
+            in: [undefined],
+          },
+        },
+      })
+      expect(posts.totalDocs).toBe(0)
+    })
+
+    it('payload.find with id in []', async () => {
+      const posts = await payload.find({
+        collection: postsSlug,
+        where: {
+          id: {
+            in: [null],
+          },
+        },
+      })
+      expect(posts.totalDocs).toBe(0)
+    })
   })
 
-  it('rest API example', async () => {
-    const newPost = await fetch(`${apiUrl}/${postsSlug}`, {
-      method: 'POST',
-      headers: {
-        ...headers,
-        Authorization: `JWT ${jwt}`,
-      },
-      body: JSON.stringify({
-        text: 'REST API EXAMPLE',
-      }),
-    }).then((res) => res.json())
+  describe('REST API', () => {
+    it('should find 1 doc', async () => {
+      const where: Where = {}
 
-    expect(newPost.doc.text).toEqual('REST API EXAMPLE')
+      const posts = await fetch(`${apiUrl}/${postsSlug}?${qs.stringify({ where })}`, {
+        method: 'GET',
+        headers: {
+          ...headers,
+          Authorization: `JWT ${jwt}`,
+        },
+      }).then((res) => res.json())
+
+      expect(posts.totalDocs).toEqual(1)
+    })
+
+    it('should find 0 docs with id equals null', async () => {
+      const where: Where = {
+        id: {
+          equals: null,
+        },
+      }
+
+      const posts = await fetch(`${apiUrl}/${postsSlug}?${qs.stringify({ where })}`, {
+        method: 'GET',
+        headers: {
+          ...headers,
+          Authorization: `JWT ${jwt}`,
+        },
+      }).then((res) => res.json())
+
+      expect(posts.totalDocs).toEqual(0)
+    })
+
+    it('should find 0 docs with {id: {equals: undefined}}', async () => {
+      const where: Where = {
+        id: {
+          equals: undefined,
+        },
+      }
+
+      const posts = await fetch(`${apiUrl}/${postsSlug}?${qs.stringify({ where })}`, {
+        method: 'GET',
+        headers: {
+          ...headers,
+          Authorization: `JWT ${jwt}`,
+        },
+      }).then((res) => res.json())
+
+      expect(posts.totalDocs).toEqual(0)
+    })
+
+    it('should find 0 docs with id in []', async () => {
+      const where: Where = {
+        id: {
+          in: [],
+        },
+      }
+
+      const posts = await fetch(`${apiUrl}/${postsSlug}?${qs.stringify({ where })}`, {
+        method: 'GET',
+        headers: {
+          ...headers,
+          Authorization: `JWT ${jwt}`,
+        },
+      }).then((res) => res.json())
+
+      expect(posts.totalDocs).toEqual(0)
+    })
+
+    it('should find 0 docs with id in [undefined]', async () => {
+      const where: Where = {
+        id: {
+          in: [undefined],
+        },
+      }
+
+      const posts = await fetch(`${apiUrl}/${postsSlug}?${qs.stringify({ where })}`, {
+        method: 'GET',
+        headers: {
+          ...headers,
+          Authorization: `JWT ${jwt}`,
+        },
+      }).then((res) => res.json())
+
+      expect(posts.totalDocs).toEqual(0)
+    })
+
+    it('should find 0 docs with id in [null]', async () => {
+      const where: Where = {
+        id: {
+          in: [null],
+        },
+      }
+
+      const posts = await fetch(`${apiUrl}/${postsSlug}?${qs.stringify({ where })}`, {
+        method: 'GET',
+        headers: {
+          ...headers,
+          Authorization: `JWT ${jwt}`,
+        },
+      }).then((res) => res.json())
+
+      expect(posts.errors).not.toBeDefined()
+    })
   })
 })
