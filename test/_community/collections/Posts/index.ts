@@ -19,6 +19,18 @@ export const PostsCollection: CollectionConfig = {
       relationTo: mediaSlug,
       type: 'upload',
     },
+    {
+      name: 'relatedPost',
+      type: 'relationship',
+      relationTo: postsSlug,
+      filterOptions: ({ id }) => {
+        return {
+          id: {
+            not_in: [id],
+          },
+        }
+      },
+    },
   ],
   slug: postsSlug,
 }
