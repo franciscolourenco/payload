@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid'
 import { buildConfigWithDefaults } from '../buildConfigWithDefaults'
 import { devUser } from '../credentials'
 import { MediaCollection } from './collections/Media'
@@ -9,6 +10,34 @@ export default buildConfigWithDefaults({
   collections: [
     PostsCollection,
     MediaCollection,
+    {
+      slug: 'users',
+      fields: [
+        {
+          name: 'username',
+          type: 'text',
+        },
+      ],
+      auth: {
+        useAPIKey: true,
+      },
+      hooks: {
+        beforeValidate: [
+          ({ data, context }) => {
+            if (context.skipHook) return data
+
+            // should prevent further changes to API Key, but it actually sets the apiKey to null
+            data!.enableAPIKey = undefined
+            data!.apiKey = undefined
+
+            // prevents further changes to the username
+            data!.username = undefined
+
+            return data
+          },
+        ],
+      },
+    },
     // ...add more collections here
   ],
   globals: [
@@ -25,6 +54,12 @@ export default buildConfigWithDefaults({
       data: {
         email: devUser.email,
         password: devUser.password,
+        username: 'devuser',
+        apiKey: uuidv4(),
+        enableAPIKey: true,
+      },
+      context: {
+        skipHook: true,
       },
     })
 

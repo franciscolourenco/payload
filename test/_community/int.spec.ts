@@ -7,6 +7,7 @@ require('isomorphic-fetch')
 
 let apiUrl
 let jwt
+let user
 
 const headers = {
   'Content-Type': 'application/json',
@@ -30,6 +31,7 @@ describe('_Community Tests', () => {
     })
 
     const data = await response.json()
+    user = data.user
     jwt = data.token
   })
 
@@ -44,29 +46,36 @@ describe('_Community Tests', () => {
   // use the tests below as a guide
   // --__--__--__--__--__--__--__--__--__
 
-  it('local API example', async () => {
-    const newPost = await payload.create({
-      collection: postsSlug,
+  it('the hook should prevent further changes to the username', async () => {
+    const updatedUser = await payload.update({
+      collection: 'users',
+      id: user.id,
       data: {
-        text: 'LOCAL API EXAMPLE',
+        username: 'new username',
       },
     })
 
-    expect(newPost.text).toEqual('LOCAL API EXAMPLE')
+    // This works because properties deleted in hooks are ignored
+    expect(updatedUser.username).toBe('devuser')
   })
 
-  it('rest API example', async () => {
-    const newPost = await fetch(`${apiUrl}/${postsSlug}`, {
-      method: 'POST',
-      headers: {
-        ...headers,
-        Authorization: `JWT ${jwt}`,
-      },
-      body: JSON.stringify({
-        text: 'REST API EXAMPLE',
-      }),
-    }).then((res) => res.json())
+  it('should not delete API key when updating other fields', async () => {
+    const foundUser = await payload.findByID({
+      collection: 'users',
+      id: user.id,
+    })
 
-    expect(newPost.doc.text).toEqual('REST API EXAMPLE')
+    expect(foundUser.apiKey).not.toBeNull()
+
+    const updatedUser = await payload.update({
+      collection: 'users',
+      id: user.id,
+      data: {
+        username: 'new username',
+      },
+    })
+
+    // The API key is set to null because the hook sets it to undefined
+    expect(updatedUser.apiKey).not.toBeNull()
   })
 })
