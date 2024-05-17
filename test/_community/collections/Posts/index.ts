@@ -19,6 +19,27 @@ export const PostsCollection: CollectionConfig = {
       relationTo: mediaSlug,
       type: 'upload',
     },
+    {
+      type: 'text',
+      name: 'correctlyRemovedFromTheListView',
+      admin: {
+        disableListColumn: true,
+        disableListFilter: true,
+      },
+    },
+    {
+      type: 'row',
+      fields: [
+        {
+          type: 'text',
+          name: 'incorrectlyNotRemovedFromTheListView',
+          admin: {
+            disableListColumn: true,
+            disableListFilter: true,
+          },
+        },
+      ],
+    },
   ],
   slug: postsSlug,
 }
