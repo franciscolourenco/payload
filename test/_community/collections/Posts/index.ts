@@ -7,6 +7,17 @@ export const postsSlug = 'posts'
 export const PostsCollection: CollectionConfig = {
   fields: [
     {
+      name: 'uiField',
+      type: 'ui',
+      admin: {
+        components: {
+          Field: () => 'UI Field',
+        },
+        disableListColumn: true,
+        disableListFilter: true,
+      },
+    },
+    {
       name: 'text',
       type: 'text',
     },
