@@ -27,4 +27,14 @@ describe('Admin Panel', () => {
     const textCell = page.locator('.row-1 .cell-text')
     await expect(textCell).toHaveText('example post')
   })
+
+  test('the tabs field not have the .tabs-field--within-collapsible class', async () => {
+    await page.goto(url.list)
+
+    const anchor = page.locator('.row-1 .cell-id a')
+    await anchor.click()
+
+    const tabsField = page.locator('.tabs-field').first()
+    await expect(tabsField).not.toHaveClass(/tabs-field--within-collapsible/)
+  })
 })

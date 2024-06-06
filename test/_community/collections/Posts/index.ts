@@ -7,6 +7,15 @@ export const postsSlug = 'posts'
 export const PostsCollection: CollectionConfig = {
   fields: [
     {
+      type: 'tabs',
+      tabs: [
+        {
+          name: 'tabOne',
+          fields: [],
+        },
+      ],
+    },
+    {
       name: 'text',
       type: 'text',
     },
