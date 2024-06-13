@@ -19,6 +19,60 @@ export const PostsCollection: CollectionConfig = {
       relationTo: mediaSlug,
       type: 'upload',
     },
+    {
+      type: 'collapsible',
+      label: 'Collapsible',
+      fields: [
+        {
+          type: 'collapsible',
+          label: 'Collapsible',
+          fields: [],
+        },
+        {
+          type: 'tabs',
+          label: 'Tabs',
+          tabs: [
+            {
+              label: 'Tab 1',
+              fields: [],
+            },
+          ],
+        },
+        {
+          type: 'group',
+          name: 'group',
+          label: 'Group',
+          fields: [],
+        },
+      ],
+    },
+    {
+      type: 'array',
+      name: 'array',
+      fields: [
+        {
+          type: 'collapsible',
+          label: 'Collapsible',
+          fields: [],
+        },
+        {
+          type: 'tabs',
+          label: 'Tabs',
+          tabs: [
+            {
+              label: 'Tab 1',
+              fields: [],
+            },
+          ],
+        },
+        {
+          type: 'group',
+          name: 'group',
+          label: 'Group',
+          fields: [],
+        },
+      ],
+    },
   ],
   slug: postsSlug,
 }
