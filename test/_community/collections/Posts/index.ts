@@ -24,6 +24,16 @@ export const PostsCollection: CollectionConfig = {
       relationTo: mediaSlug,
       type: 'upload',
     },
+    {
+      name: 'relatedPosts',
+      type: 'relationship',
+      // Polymorphic relationship required to reproduce the issue
+      relationTo: ['posts'],
+    },
   ],
   slug: postsSlug,
+  versions: {
+    // Drafts required to reproduce the issue
+    drafts: true,
+  },
 }
