@@ -1,3 +1,5 @@
+import path from 'path'
+
 import { buildConfigWithDefaults } from '../buildConfigWithDefaults'
 import { devUser } from '../credentials'
 import { MediaCollection } from './collections/Media'
@@ -18,7 +20,9 @@ export default buildConfigWithDefaults({
   graphQL: {
     schemaOutputFile: './test/_community/schema.graphql',
   },
-
+  admin: {
+    css: path.resolve(__dirname, './custom.scss'),
+  },
   onInit: async (payload) => {
     await payload.create({
       collection: 'users',
