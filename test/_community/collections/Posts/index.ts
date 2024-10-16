@@ -6,6 +6,13 @@ export const PostsCollection: CollectionConfig = {
   slug: postsSlug,
   admin: {
     useAsTitle: 'text',
+    components: {
+      beforeList: [
+        {
+          path: '/collections/Posts/CustomBeforeList.js#CustomBeforeList',
+        },
+      ],
+    },
   },
   fields: [
     {
