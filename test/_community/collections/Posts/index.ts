@@ -11,6 +11,19 @@ export const PostsCollection: CollectionConfig = {
     {
       name: 'title',
       type: 'text',
+      admin: {
+        disabled: true,
+      },
+    },
+    {
+      type: 'collapsible',
+      label: 'Default Label',
+      admin: {
+        components: {
+          Label: '/collections/Posts/CustomLabel.js#CustomLabel',
+        },
+      },
+      fields: [],
     },
   ],
   versions: {
