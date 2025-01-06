@@ -12,6 +12,24 @@ export const PostsCollection: CollectionConfig = {
       name: 'title',
       type: 'text',
     },
+    {
+      name: 'conditionFunctionReceivedDocumentId',
+      type: 'checkbox',
+      defaultValue: true,
+      admin: {
+        condition: (data) => typeof data.id === 'string',
+        readOnly: true,
+      },
+    },
+    {
+      name: 'titleChanged',
+      type: 'checkbox',
+      defaultValue: true,
+      admin: {
+        condition: (data) => data.title !== 'example post',
+        readOnly: true,
+      },
+    },
   ],
   versions: {
     drafts: true,

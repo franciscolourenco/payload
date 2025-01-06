@@ -33,5 +33,25 @@ test.describe('Community', () => {
 
     const textCell = page.locator('.row-1 .cell-title')
     await expect(textCell).toHaveText('example post')
+
+    // Navigate to "example post" edit view
+    await page.click('.row-1 .cell-title')
+
+    // Wait for post to be visible
+    const titleInput = page.locator('#field-title')
+    await page.waitForSelector('#field-title')
+    await expect(page.locator('#field-title')).toHaveValue('example post')
+
+    // Confirm that the condition function received the document id
+    await expect(page.locator('#field-conditionFunctionReceivedDocumentId')).toBeVisible()
+
+    // Make a change to the document
+    await page.locator('#field-title').fill('new title')
+
+    // Wait for condition functions to execute
+    await page.waitForSelector('#field-titleChanged')
+
+    // Confirm that the condition function received the document id (currently failing)
+    await expect(page.locator('#field-conditionFunctionReceivedDocumentId')).toBeVisible()
   })
 })
