@@ -12,6 +12,15 @@ export const PostsCollection: CollectionConfig = {
       name: 'title',
       type: 'text',
     },
+    {
+      type: 'ui',
+      name: 'customComponent',
+      admin: {
+        components: {
+          Field: './collections/Posts/CustomComponent#CustomComponent',
+        },
+      },
+    },
   ],
   versions: {
     drafts: true,
