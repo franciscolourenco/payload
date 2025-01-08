@@ -13,12 +13,10 @@ export const PostsCollection: CollectionConfig = {
       type: 'text',
     },
     {
-      type: 'ui',
-      name: 'customComponent',
+      name: 'updatedAt',
+      type: 'text',
       admin: {
-        components: {
-          Field: './collections/Posts/CustomComponent#CustomComponent',
-        },
+        readOnly: true,
       },
     },
   ],
